@@ -30,7 +30,8 @@ app.get("/", (req, res) => {
 
   posts.find({}, (err, blogs) => {
     if (!err) {
-      res.render("home",
+      //render blogs in home page
+      res.render("home", 
         {
           homeContent: homeStartingContent,
           posts: blogs
@@ -38,8 +39,6 @@ app.get("/", (req, res) => {
     }
   });
 
-
-  // console.log(posts);
 });
 
 
@@ -62,8 +61,8 @@ app.get("/compose", (req, res) => {
 
 
 app.post("/", (req, res) => {
-
-  const post = new posts({   //post object
+// create post object
+  const post = new posts({   
     postTitle: req.body.postTitle,
     postBody: req.body.postBody
   });
