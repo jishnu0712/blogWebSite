@@ -23,12 +23,12 @@ const postSchema = {
   postTitle: String,
   postBody: String
 };
-const postModel = mongoose.model("post", postSchema);
+const posts = mongoose.model("post", postSchema);
 
 
 app.get("/", (req, res) => {
 
-  postModel.find({}, (err, blogs) => {
+  posts.find({}, (err, blogs) => {
     if (!err) {
       res.render("home",
         {
@@ -63,42 +63,33 @@ app.get("/compose", (req, res) => {
 
 app.post("/", (req, res) => {
 
-
-
-
-  const post = new postModel({   //post object
+  const post = new posts({   //post object
     postTitle: req.body.postTitle,
     postBody: req.body.postBody
   });
 
-  post.save();
+  post.save().then(() => {
+    res.redirect("/");
+  });
 
-  res.redirect("/");
+
 });
 
 
 app.get("/posts/:userId", (req, res) => {
-  let userId = req.params.userId;
-  userId = _.lowerCase(userId);
-  posts.forEach(element => {
+  const userId = _.lowerCase(req.params.userId);
 
-    let postTitle = element.postTitle;
-
-    postTitle = _.lowerCase(postTitle);
-    if (userId === postTitle) {
+  //retrive from db
+  posts.findOne({postTitle: userId},(err,doc)=>{
+    if(!err){
       res.render("post", {
-        postTitle: element.postTitle,
-        postBody: element.postBody
+        postTitle: doc.postTitle,
+        postBody: doc.postBody
       });
-    }
-    else {
-      console.log("match not found");
     }
   });
 
 });
-
-
 
 
 
