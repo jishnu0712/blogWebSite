@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 
 //database connection
-mongoose.connect('mongodb://localhost:27017/blogApp');
+mongoose.connect('mongodb+srv://admin-jishnu:test123@cluster0.c22bc.mongodb.net/blogApp');
 
 const postSchema = {
   postTitle: String,
@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   posts.find({}, (err, blogs) => {
     if (!err) {
       //render blogs in home page
-      res.render("home", 
+      res.render("home",
         {
           homeContent: homeStartingContent,
           posts: blogs
@@ -61,9 +61,9 @@ app.get("/compose", (req, res) => {
 
 
 app.post("/", (req, res) => {
-// create post object
-  const post = new posts({   
-    postTitle: req.body.postTitle,
+  // create post object
+  const post = new posts({
+    postTitle: _.startCase(req.body.postTitle),
     postBody: req.body.postBody
   });
 
@@ -76,11 +76,11 @@ app.post("/", (req, res) => {
 
 
 app.get("/posts/:userId", (req, res) => {
-  const userId = _.lowerCase(req.params.userId);
+  const userId = _.startCase(req.params.userId);
 
   //retrive from db
-  posts.findOne({postTitle: userId},(err,doc)=>{
-    if(!err){
+  posts.findOne({ postTitle: userId }, (err, doc) => {
+    if (!err) {
       res.render("post", {
         postTitle: doc.postTitle,
         postBody: doc.postBody
@@ -92,6 +92,12 @@ app.get("/posts/:userId", (req, res) => {
 
 
 
-app.listen(3000, function () {
-  console.log("Server started on port 3000");
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port, (req, res) => {
+  console.log("server started");
 });
+
