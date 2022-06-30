@@ -41,9 +41,6 @@ app.get("/", (req, res) => {
 
 });
 
-
-
-
 app.get("/about", (req, res) => {
   res.render("about", { aboutContent: aboutContent });
 });
@@ -70,8 +67,6 @@ app.post("/", (req, res) => {
   post.save().then(() => {
     res.redirect("/");
   });
-
-
 });
 
 
@@ -91,8 +86,6 @@ app.get("/posts/:userId", (req, res) => {
 });
 
 
-
-
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
@@ -100,4 +93,3 @@ if (port == null || port == "") {
 app.listen(port, (req, res) => {
   console.log("server started");
 });
-
